@@ -95,3 +95,6 @@ var generateRandomAd = function () {
 };
 
 var adverts = generateAdArray(AD_QUANTITY);
+
+//показываем карту
+document.querySelector(.'map').classList.remove('map--faded');
