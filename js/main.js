@@ -1,10 +1,10 @@
 'use strict';
 
-//константы
+//  константы
 var AD_QUANTITY = 8;
 
 var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
-var TITLES = ['большой дворец','маленький дворец','большая квартира', 'маленькая квартира', 'большой дом', 'маленький дом', 'большое бунгало', 'маленькое бунгало'];
+var TITLES = ['большой дворец', 'маленький дворец', 'большая квартира', 'маленькая квартира', 'большой дом', 'маленький дом', 'большое бунгало', 'маленькое бунгало'];
 var PRICE_MIN = 100;
 var PRICE_MAX = 100000;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
@@ -22,28 +22,28 @@ var LOCATION_Y_MAX = 630;
 var LOCATION_X_MIN = 0;
 var LOCATION_X_MAX = 1200;
 
-//массив из исходного
+//  массив из исходного
 var shuffleArray = function (array, length) {
- var newArray = [];
- var tempArray = array.slice();
- var arrayCount = length ? length - 1 : tempArray.length - 1;
- arr.forEach (function (arrayCount) {
+  var newArray = [];
+  var tempArray = array.slice();
+  // var arrayCount = length ? length - 1 : tempArray.length - 1;
+  array.forEach (function () {
  // for (var i = 0; i <= arrayCount; i++) {
-   var randomId = getRandomIntInclusive(0, tempArray.length - 1); // случ индекс
-   newArray.push(tempArray[randomId]); //записываем
-   tempArray.splice(randomId, 1); //удаляем временный
- });
-return newArray;
+    var randomId = getRandomIntInclusive(0, tempArray.length - 1); // случ индекс
+    newArray.push(tempArray[randomId]); //  записываем
+    tempArray.splice(randomId, 1); // удаляем временный
+  });
+  return newArray;
 };
 
-//случайное число min-max
+//  случайное число min-max
 var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-//случайное положение
+//  случайное положение
 var getRandomLocation = function () {
   var location = {};
   location.x = getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX);
@@ -51,25 +51,25 @@ var getRandomLocation = function () {
   return location;
 };
 
-//случайный элемент
+//  случайный элемент
 var getRandomArrayElement = function (array) {
   var id = Math.floor(Math.random() * array.length);
   var element = array[id];
   return element;
 };
 
-//создаем массив
-var generateAdArray = function (amount) {
-   var array = [];
-   array.forEach (function (amount) {
-   // for (var i = 0; i < amount; i++) {
-     var advert = generateRandomAd();
-     array.push(advert);
-   });
-   return array;
- };
+//  создаем массив
+var generateAdArray = function () {
+  var array = [];
+  array.forEach (function () {
+    // for (var i = 0; i < amount; i++) {
+    var advert = generateRandomAd();
+    array.push(advert);
+  });
+  return array;
+};
 
- //cоздаем объявление
+// cоздаем объявление
 var generateRandomAd = function () {
   var advert = {};
 
@@ -94,27 +94,32 @@ var generateRandomAd = function () {
   return advert;
 };
 
-var renderAdPin = function (data, template) {
-   var element = template.cloneNode(true);
-   element.style.left = data.location.x + 'px';
-   element.style.top = data.location.y + 'px';
-   element.querySelector('img').src = data.avatar;
-   return element;
- };
+//  клонируем пин
+  var renderAdPin = function (data, template) {
+  var element = template.cloneNode(true);
+  element.style.left = data.location.x + 'px';
+  element.style.top = data.location.y + 'px';
+  element.querySelector('img').src = data.avatar;
+return element;
+};
 
- var renderAdPins = function (array) {
-   var template = document.querySelector('#pin').content;
-   var fragment = document.createDocumentFragment();
-   for (var i = 0; i < array.length; i++) {
-     var element = renderAdPin(array[i], template);
-     fragment.appendChild(element);
-   }
-   document.querySelector('.map__pins').appendChild(fragment);
- };
+//  список точек
+  var renderAdPins = function (array) {
+  var template = document.querySelector('#pin').content;
+  var fragment = document.createDocumentFragment();
+  array.forEach (function () {
+   // for (var i = 0; i < array.length; i++) {
+    var element = renderAdPin(array[i], template);
+    fragment.appendChild(element);
+  });
+  document.querySelector('.map__pins').appendChild(fragment);
+};
 
+//  создаем массив объявлений
 var adverts = generateAdArray(AD_QUANTITY);
-console.log(adverts);
 
-//показываем карту
+//  показываем карту
 document.querySelector('.map').classList.remove('map--faded');
+
+//  наносим точки
 renderAdPins(adverts);
