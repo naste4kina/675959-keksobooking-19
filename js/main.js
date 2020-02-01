@@ -28,7 +28,7 @@ var shuffleArray = function (array) {
   var tempArray = array.slice();
   // var arrayCount = length ? length - 1 : tempArray.length - 1;
   array.forEach(function () {
-     // for (var i = 0; i <= arrayCount; i++) {
+    // for (var i = 0; i <= arrayCount; i++) {
     var randomId = getRandomIntInclusive(0, tempArray.length - 1);
     newArray.push(tempArray[randomId]); //  записываем
     tempArray.splice(randomId, 1); // удаляем временный
