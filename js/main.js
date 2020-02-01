@@ -23,13 +23,13 @@ var LOCATION_X_MIN = 0;
 var LOCATION_X_MAX = 1200;
 
 //  массив из исходного
-var shuffleArray = function (array, length) {
+var shuffleArray = function (array) {
   var newArray = [];
   var tempArray = array.slice();
   // var arrayCount = length ? length - 1 : tempArray.length - 1;
-  array.forEach (function () {
- // for (var i = 0; i <= arrayCount; i++) {
-    var randomId = getRandomIntInclusive(0, tempArray.length - 1); // случ индекс
+  array.forEach(function () {
+     // for (var i = 0; i <= arrayCount; i++) {
+    var randomId = getRandomIntInclusive(0, tempArray.length - 1);
     newArray.push(tempArray[randomId]); //  записываем
     tempArray.splice(randomId, 1); // удаляем временный
   });
@@ -61,7 +61,7 @@ var getRandomArrayElement = function (array) {
 //  создаем массив
 var generateAdArray = function () {
   var array = [];
-  array.forEach (function () {
+  array.forEach(function () {
     // for (var i = 0; i < amount; i++) {
     var advert = generateRandomAd();
     array.push(advert);
@@ -95,21 +95,21 @@ var generateRandomAd = function () {
 };
 
 //  клонируем пин
-  var renderAdPin = function (data, template) {
+var renderAdPin = function (data, template) {
   var element = template.cloneNode(true);
   element.style.left = data.location.x + 'px';
   element.style.top = data.location.y + 'px';
   element.querySelector('img').src = data.avatar;
-return element;
+  return element;
 };
 
 //  список точек
-  var renderAdPins = function (array) {
+var renderAdPins = function (array) {
   var template = document.querySelector('#pin').content;
   var fragment = document.createDocumentFragment();
-  array.forEach (function () {
-   // for (var i = 0; i < array.length; i++) {
-    var element = renderAdPin(array[i], template);
+  array.forEach(function () {
+    // for (var i = 0; i < array.length; i++) {
+    var element = renderAdPin(array, template);
     fragment.appendChild(element);
   });
   document.querySelector('.map__pins').appendChild(fragment);
