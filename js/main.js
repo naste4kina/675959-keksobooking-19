@@ -61,7 +61,7 @@ var getRandomArrayElement = function (array) {
 //создаем массив
 var generateAdArray = function (amount) {
    var array = [];
-   arr.forEach (function (amount) {
+   array.forEach (function (amount) {
    // for (var i = 0; i < amount; i++) {
      var advert = generateRandomAd();
      array.push(advert);
@@ -94,7 +94,27 @@ var generateRandomAd = function () {
   return advert;
 };
 
+var renderAdPin = function (data, template) {
+   var element = template.cloneNode(true);
+   element.style.left = data.location.x + 'px';
+   element.style.top = data.location.y + 'px';
+   element.querySelector('img').src = data.avatar;
+   return element;
+ };
+
+ var renderAdPins = function (array) {
+   var template = document.querySelector('#pin').content;
+   var fragment = document.createDocumentFragment();
+   for (var i = 0; i < array.length; i++) {
+     var element = renderAdPin(array[i], template);
+     fragment.appendChild(element);
+   }
+   document.querySelector('.map__pins').appendChild(fragment);
+ };
+
 var adverts = generateAdArray(AD_QUANTITY);
+console.log(adverts);
 
 //показываем карту
-document.querySelector(.'map').classList.remove('map--faded');
+document.querySelector('.map').classList.remove('map--faded');
+renderAdPins(adverts);
