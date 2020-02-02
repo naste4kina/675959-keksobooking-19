@@ -50,45 +50,44 @@ var getRandomArrayElement = function (array) {
 var generateRandomAd = function () {
   var advert = {};
 
-    advert.author = {
-      avatar : 'img/avatars/user0' + getRandomIntInclusive(1, 8) + '.png'
-    };
+  advert.author = {
+    avatar: 'img/avatars/user0' + getRandomIntInclusive(1, 8) + '.png'
+  };
 
-    advert.offer = {
-      title : getRandomArrayElement(TITLES),
-      address : location.x + ', ' + location.y,
-      price : getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
-      type : getRandomArrayElement(TYPES),
-      rooms : getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
-      guests : getRandomIntInclusive(GUESTS_MIN, GUESTS_MAX),
-      checkin : getRandomArrayElement(CHECKIN_TIME),
-      checkout : getRandomArrayElement(CHECKOUT_TIME),
-      features : shuffleArray(FEATURES, getRandomIntInclusive(0, FEATURES.length)),
-      description : '',
-      photos : shuffleArray(PHOTOS),
-    };
+  advert.offer = {
+    title: getRandomArrayElement(TITLES),
+    address: location.x + ', ' + location.y,
+    price: getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
+    type: getRandomArrayElement(TYPES),
+    rooms: getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
+    guests: getRandomIntInclusive(GUESTS_MIN, GUESTS_MAX),
+    checkin: getRandomArrayElement(CHECKIN_TIME),
+    checkout: getRandomArrayElement(CHECKOUT_TIME),
+    features: shuffleArray(FEATURES, getRandomIntInclusive(0, FEATURES.length)),
+    description: '',
+    photos : shuffleArray(PHOTOS),
+  };
 
 
-    advert.location = {
-      x : getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
-      y : getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
-      };
+  advert.location = {
+    x: getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
+    y: getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
+  };
 
-      return advert;
-    };
+  return advert;
+};
 
 
 //  создаем массив
 var generateAdArray = function (amount) {
   var array = [];
-    for (var i = 0; i < amount; i++) {
+  for (var i = 0; i < amount; i++) {
     var advert = generateRandomAd();
     array.push(advert);
   }
   return array;
 };
 
-var map = document.querySelector('.map');
 var pinsTemplate = document.querySelector('#pin')
 .content
 .querySelector('.map__pin');
@@ -110,12 +109,7 @@ var renderAdPins = function () {
     var element = renderAdPin(pinList[i]);
     fragment.appendChild(element);
   }
-mapPins.appendChild(fragment);
-// список точек
-
-  var template = document.querySelector('#pin').content;
-
-
+  mapPins.appendChild(fragment);
   document.querySelector('.map__pins').appendChild(fragment);
 };
 
