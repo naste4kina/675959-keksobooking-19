@@ -65,7 +65,7 @@ var generateRandomAd = function () {
     checkout: getRandomArrayElement(CHECKOUT_TIME),
     features: shuffleArray(FEATURES, getRandomIntInclusive(0, FEATURES.length)),
     description: '',
-    photos : shuffleArray(PHOTOS),
+    photos: shuffleArray(PHOTOS),
   };
 
 
