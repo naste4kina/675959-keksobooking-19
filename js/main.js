@@ -1,9 +1,6 @@
 'use strict';
 
 //  константы
-var AD_QUANTITY = 8;
-
-var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
 var TITLES = ['большой дворец', 'маленький дворец', 'большая квартира', 'маленькая квартира', 'большой дом', 'маленький дом', 'большое бунгало', 'маленькое бунгало'];
 var PRICE_MIN = 100;
 var PRICE_MAX = 100000;
@@ -26,13 +23,12 @@ var LOCATION_X_MAX = 1200;
 var shuffleArray = function (array) {
   var newArray = [];
   var tempArray = array.slice();
-  // var arrayCount = length ? length - 1 : tempArray.length - 1;
-  array.forEach(function () {
-    // for (var i = 0; i <= arrayCount; i++) {
+  var arrayCount = length ? length - 1 : tempArray.length - 1;
+  for (var i = 0; i <= arrayCount; i++) {
     var randomId = getRandomIntInclusive(0, tempArray.length - 1);
     newArray.push(tempArray[randomId]); //  записываем
     tempArray.splice(randomId, 1); // удаляем временный
-  });
+  }
   return newArray;
 };
 
@@ -40,15 +36,7 @@ var shuffleArray = function (array) {
 var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-//  случайное положение
-var getRandomLocation = function () {
-  var location = {};
-  location.x = getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX);
-  location.y = getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX);
-  return location;
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
 //  случайный элемент
@@ -58,68 +46,81 @@ var getRandomArrayElement = function (array) {
   return element;
 };
 
-//  создаем массив
-var generateAdArray = function () {
-  var array = [];
-  array.forEach(function () {
-    // for (var i = 0; i < amount; i++) {
-    var advert = generateRandomAd();
-    array.push(advert);
-  });
-  return array;
-};
-
 // cоздаем объявление
 var generateRandomAd = function () {
   var advert = {};
 
-  advert.avatar = getRandomArrayElement(AVATARS);
+    advert.author = {
+      avatar : 'img/avatars/user0' + getRandomIntInclusive(1, 8) + '.png'
+    };
 
-  advert.offer = {};
+    advert.offer = {
+      title : getRandomArrayElement(TITLES),
+      address : location.x + ', ' + location.y,
+      price : getRandomIntInclusive(PRICE_MIN, PRICE_MAX),
+      type : getRandomArrayElement(TYPES),
+      rooms : getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
+      guests : getRandomIntInclusive(GUESTS_MIN, GUESTS_MAX),
+      checkin : getRandomArrayElement(CHECKIN_TIME),
+      checkout : getRandomArrayElement(CHECKOUT_TIME),
+      features : shuffleArray(FEATURES, getRandomIntInclusive(0, FEATURES.length)),
+      description : '',
+      photos : shuffleArray(PHOTOS),
+    };
 
-  advert.offer.title = getRandomArrayElement(TITLES);
-  advert.offer.address = '{{' + advert.location.x + '}}, {{' + advert.location.y + '}}';
-  advert.offer.price = getRandomIntInclusive(PRICE_MIN, PRICE_MAX);
-  advert.offer.type = getRandomArrayElement(TYPES);
-  advert.offer.rooms = getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX);
-  advert.offer.guests = getRandomIntInclusive(GUESTS_MIN, GUESTS_MAX);
-  advert.offer.checkin = getRandomArrayElement(CHECKIN_TIME);
-  advert.offer.checkout = getRandomArrayElement(CHECKOUT_TIME);
-  advert.offer.features = shuffleArray(FEATURES, getRandomIntInclusive(0, FEATURES.length));
-  advert.offer.description = '';
-  advert.offer.photos = shuffleArray(PHOTOS);
 
-  advert.location = getRandomLocation();
+    advert.location = {
+      x : getRandomIntInclusive(LOCATION_X_MIN, LOCATION_X_MAX),
+      y : getRandomIntInclusive(LOCATION_Y_MIN, LOCATION_Y_MAX)
+      };
 
-  return advert;
+      return advert;
+    };
+
+
+//  создаем массив
+var generateAdArray = function (amount) {
+  var array = [];
+    for (var i = 0; i < amount; i++) {
+    var advert = generateRandomAd();
+    array.push(advert);
+  }
+  return array;
 };
 
-//  клонируем пин
-var renderAdPin = function (data, template) {
-  var element = template.cloneNode(true);
-  element.style.left = data.location.x + 'px';
-  element.style.top = data.location.y + 'px';
-  element.querySelector('img').src = data.avatar;
+var map = document.querySelector('.map');
+var pinsTemplate = document.querySelector('#pin')
+.content
+.querySelector('.map__pin');
+var mapPins = document.querySelector('.map__pins');
+
+var renderAdPin = function (advert) {
+  var element = pinsTemplate.cloneNode(true);
+  element.style.left = advert.location.x + 'px';
+  element.style.top = advert.location.y + 'px';
+  var pinImg = element.querySelector('img');
+  pinImg.src = advert.author.avatar;
+  pinImg.alt = advert.offer.title;
   return element;
 };
-
-//  список точек
-var renderAdPins = function (array) {
-  var template = document.querySelector('#pin').content;
+var renderAdPins = function () {
+  var pinList = generateAdArray(8);
   var fragment = document.createDocumentFragment();
-  array.forEach(function () {
-    // for (var i = 0; i < array.length; i++) {
-    var element = renderAdPin(array, template);
+  for (var i = 0; i < pinList.length; i++) {
+    var element = renderAdPin(pinList[i]);
     fragment.appendChild(element);
-  });
+  }
+mapPins.appendChild(fragment);
+// список точек
+
+  var template = document.querySelector('#pin').content;
+
+
   document.querySelector('.map__pins').appendChild(fragment);
 };
-
-//  создаем массив объявлений
-var adverts = generateAdArray(AD_QUANTITY);
 
 //  показываем карту
 document.querySelector('.map').classList.remove('map--faded');
 
-//  наносим точки
-renderAdPins(adverts);
+// наносим точки
+renderAdPins();
